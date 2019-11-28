@@ -6,9 +6,13 @@ import os
 
 
 GPD_PATH = "/home/tpatten/Code/gpd/"
-PROGRAM_NAME = os.path.join(GPD_PATH, "build/./detect_grasps")
-PROGRAM_ARGUMENTS = os.path.join(GPD_PATH, "cfg/eigen_params.cfg")
-PCD_FILE = os.path.join(GPD_PATH, "tutorials/krylon.pcd")
+DATA_PATH = os.path.join(GPD_PATH, "hsrb_data")
+CONFIG_PATH = os.path.join(GPD_PATH, "cfg")
+CONFIG_FILE = "hsrb_params.cfg"
+PCD_FILE = "temp.pcd"
+GRASPS_FILE = "grasps.txt"
+PROGRAM_NAME = os.path.join(GPD_PATH, "build/./detect_grasps_hsrb")
+PROGRAM_ARGUMENTS = os.path.join(CONFIG_PATH, CONFIG_FILE) + " " + os.path.join(DATA_PATH, PCD_FILE) + " " + os.path.join(DATA_PATH, GRASPS_FILE)
 
 class GPDService:
     def __init__(self):
@@ -20,12 +24,18 @@ class GPDService:
         rospy.loginfo('GPD service called')
         ret = TriggerResponse()
         ret.success = False
-        ret.message = "Location"
         
-        cmd = PROGRAM_NAME + " " + PROGRAM_ARGUMENTS + " " + PCD_FILE
-        print(cmd)
-        os.system(cmd)
-        
+        cmd = PROGRAM_NAME + " " + PROGRAM_ARGUMENTS
+        print('CMD ' + cmd)
+        cmd_res = os.system(cmd)
+        print('CMD returned ' + str(cmd_res))
+
+        if cmd_res == 0:
+            rospy.loginfo('GPD service succeeded')
+            ret.success = True
+        else:
+            rospy.logwarn('GPD service failed')
+
         return ret
 
 if __name__ == '__main__':

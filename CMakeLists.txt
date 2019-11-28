@@ -133,6 +133,7 @@ add_library(${PROJECT_NAME}_image_generator src/${PROJECT_NAME}/descriptor/image
 ## Declare C++ executables
 add_executable(${PROJECT_NAME}_cem_detect_grasps src/cem_detect_grasps.cpp)
 add_executable(${PROJECT_NAME}_detect_grasps src/detect_grasps.cpp)
+add_executable(${PROJECT_NAME}_detect_grasps_hsrb src/detect_grasps_hsrb.cpp)
 add_executable(${PROJECT_NAME}_generate_candidates src/generate_candidates.cpp)
 add_executable(${PROJECT_NAME}_label_grasps src/label_grasps.cpp)
 add_executable(${PROJECT_NAME}_test_grasp_image src/tests/test_grasp_image.cpp)
@@ -256,6 +257,11 @@ target_link_libraries(${PROJECT_NAME}_detect_grasps
   ${PROJECT_NAME}_config_file
 ${PCL_LIBRARIES})
 
+target_link_libraries(${PROJECT_NAME}_detect_grasps_hsrb
+        ${PROJECT_NAME}_grasp_detector
+        ${PROJECT_NAME}_config_file
+        ${PCL_LIBRARIES})
+
 target_link_libraries(${PROJECT_NAME}_label_grasps
   ${PROJECT_NAME}_grasp_detector
   ${PROJECT_NAME}_config_file
@@ -279,6 +285,9 @@ set_target_properties(${PROJECT_NAME}_cem_detect_grasps
 
 set_target_properties(${PROJECT_NAME}_detect_grasps
   PROPERTIES OUTPUT_NAME detect_grasps PREFIX "")
+
+set_target_properties(${PROJECT_NAME}_detect_grasps_hsrb
+        PROPERTIES OUTPUT_NAME detect_grasps_hsrb PREFIX "")
 
 set_target_properties(${PROJECT_NAME}_generate_candidates
   PROPERTIES OUTPUT_NAME generate_candidates PREFIX "")

@@ -190,7 +190,13 @@ GraspDetector::GraspDetector(const std::string &config_filename) {
 }
 
 std::vector<std::unique_ptr<candidate::Hand>> GraspDetector::detectGrasps(
-    const util::Cloud &cloud) {
+  const util::Cloud &cloud) {
+  std::vector<std::unique_ptr<candidate::Hand>> all_grasps;
+  return detectGrasps(cloud, all_grasps);
+}
+
+std::vector<std::unique_ptr<candidate::Hand>> GraspDetector::detectGrasps(
+    const util::Cloud &cloud, std::vector<std::unique_ptr<candidate::Hand>> &all_grasps) {
   double t0_total = omp_get_wtime();
   std::vector<std::unique_ptr<candidate::Hand>> hands_out;
 
@@ -271,6 +277,15 @@ std::vector<std::unique_ptr<candidate::Hand>> GraspDetector::detectGrasps(
     hands[i]->setScore(scores[i]);
   }
   double t_classify = omp_get_wtime() - t0_classify;
+
+  /// TIM
+  all_grasps.clear();
+  for (std::size_t i = 0; i < hands.size(); ++i) {
+    all_grasps.push_back(std::unique_ptr<candidate::Hand>(new candidate::Hand(*hands[i])));
+  }
+  std::sort(all_grasps.begin(), all_grasps.end(), isScoreGreater);
+  ///
+
 
   // 5. Select the <num_selected> highest scoring grasps.
   hands = selectGrasps(hands);

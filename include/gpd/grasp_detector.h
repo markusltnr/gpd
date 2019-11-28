@@ -79,6 +79,9 @@ class GraspDetector {
   std::vector<std::unique_ptr<candidate::Hand>> detectGrasps(
       const util::Cloud &cloud);
 
+  std::vector<std::unique_ptr<candidate::Hand>> detectGrasps(
+      const util::Cloud &cloud, std::vector<std::unique_ptr<candidate::Hand>> &all_grasps);
+
   /**
    * \brief Preprocess the point cloud.
    * \param cloud_cam the point cloud
