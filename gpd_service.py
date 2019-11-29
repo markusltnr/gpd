@@ -35,6 +35,13 @@ class GPDService:
             ret.success = True
         else:
             rospy.logwarn('GPD service failed')
+            return ret
+
+        # Load the grasps file and fill the message field of the service response
+        f = open(os.path.join(DATA_PATH, GRASPS_FILE), "r")
+        grasps_text = f.readline()
+        print(grasps_text)
+        ret.message = grasps_text
 
         return ret
 
