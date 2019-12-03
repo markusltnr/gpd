@@ -77,10 +77,14 @@ class GraspDetector {
    * \return list of grasps
    */
   std::vector<std::unique_ptr<candidate::Hand>> detectGrasps(
-      const util::Cloud &cloud);
+    const util::Cloud &cloud);
 
   std::vector<std::unique_ptr<candidate::Hand>> detectGrasps(
-      const util::Cloud &cloud, std::vector<std::unique_ptr<candidate::Hand>> &all_grasps);
+      const util::Cloud &cloud, const int num_grasps);
+
+  std::vector<std::unique_ptr<candidate::Hand>> detectGrasps(
+      const util::Cloud &cloud, const int num_grasps,
+      std::vector<std::unique_ptr<candidate::Hand>> &all_grasps);
 
   /**
    * \brief Preprocess the point cloud.

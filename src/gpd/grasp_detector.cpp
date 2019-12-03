@@ -192,11 +192,18 @@ GraspDetector::GraspDetector(const std::string &config_filename) {
 std::vector<std::unique_ptr<candidate::Hand>> GraspDetector::detectGrasps(
   const util::Cloud &cloud) {
   std::vector<std::unique_ptr<candidate::Hand>> all_grasps;
-  return detectGrasps(cloud, all_grasps);
+  return detectGrasps(cloud, num_selected_, all_grasps);
 }
 
 std::vector<std::unique_ptr<candidate::Hand>> GraspDetector::detectGrasps(
-    const util::Cloud &cloud, std::vector<std::unique_ptr<candidate::Hand>> &all_grasps) {
+  const util::Cloud &cloud, const int num_grasps) {
+  std::vector<std::unique_ptr<candidate::Hand>> all_grasps;
+  return detectGrasps(cloud, num_grasps, all_grasps);
+}
+
+std::vector<std::unique_ptr<candidate::Hand>> GraspDetector::detectGrasps(
+    const util::Cloud &cloud, const int num_grasps,
+    std::vector<std::unique_ptr<candidate::Hand>> &all_grasps) {
   double t0_total = omp_get_wtime();
   std::vector<std::unique_ptr<candidate::Hand>> hands_out;
 
@@ -275,6 +282,7 @@ std::vector<std::unique_ptr<candidate::Hand>> GraspDetector::detectGrasps(
   std::vector<float> scores = classifier_->classifyImages(images);
   for (int i = 0; i < hands.size(); i++) {
     hands[i]->setScore(scores[i]);
+    //std::cout << i << " : " << scores[i] << std::endl;
   }
   double t_classify = omp_get_wtime() - t0_classify;
 
@@ -288,6 +296,9 @@ std::vector<std::unique_ptr<candidate::Hand>> GraspDetector::detectGrasps(
 
 
   // 5. Select the <num_selected> highest scoring grasps.
+  int temp_num_selected = num_selected_;
+  if (num_grasps > 0)
+    num_selected_ = num_grasps;
   hands = selectGrasps(hands);
   if (plot_valid_grasps_) {
     plotter_->plotFingers3D(hands, cloud.getCloudOriginal(), "Valid Grasps",
@@ -338,6 +349,9 @@ std::vector<std::unique_ptr<candidate::Hand>> GraspDetector::detectGrasps(
     plotter_->plotFingers3D(clusters, cloud.getCloudOriginal(),
                             "Selected Grasps", hand_geom, false);
   }
+
+  // Reset the num selected
+  num_selected_ = temp_num_selected;
 
   return clusters;
 }
