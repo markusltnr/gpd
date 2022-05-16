@@ -1,0 +1,25 @@
+version: '2.4'
+services:
+  gpd:
+    build: 
+      context: .
+    image: "gpd"
+    network_mode: "host"
+    runtime: "nvidia"
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ~/.Xauthority:/root/.Xauthority
+      - ./grasps:/home/gpd/grasps
+      - ./objects:/home/gpd/objects
+    environment:
+      ROS_MASTER_URI: "http://hsrb:11311"
+      ROS_IP: 10.0.0.182
+      Xvfb: 99 -screen 0 1920x1080x24
+      DISPLAY: $DISPLAY
+      QT_X11_NO_MITSHM: 1
+    entrypoint: ""
+    command: bash -c "./detect_grasps_hsrb ../cfg/hsrb_params.cfg ../objects/textured_simple.ply 15 ../grasps/grasps.txt"
+    stdin_open: true
+    tty: true
+    privileged: true
+
