@@ -18,7 +18,7 @@ services:
       DISPLAY: $DISPLAY
       QT_X11_NO_MITSHM: 1
     entrypoint: ""
-    command: bash -c "./detect_grasps_hsrb ../cfg/hsrb_params.cfg ../objects/textured_simple.ply 15 ../grasps/grasps.txt"
+    command: bash -c "python3 /home/gpd/run_gpd.py" #./detect_grasps_hsrb ../cfg/hsrb_params.cfg ../objects/textured_simple.ply 15 ../grasps/grasps.txt"
     stdin_open: true
     tty: true
     privileged: true
