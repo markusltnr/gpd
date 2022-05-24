@@ -33,7 +33,7 @@ namespace gpd {
                    << "0.0 0.0 0.0 1.0\n";
               }
               // Write all grasps
-              for (std::size_t i = 0; i < all_grasps.size(); ++i) {
+/*              for (std::size_t i = 0; i < all_grasps.size(); ++i) {
                 Eigen::Vector3d pos = all_grasps[i]->getPosition();
                 Eigen::Matrix3d rot = all_grasps[i]->getOrientation();
                 double score = all_grasps[i]->getScore();
@@ -42,7 +42,7 @@ namespace gpd {
                    << rot(2, 0) << " " << rot(2, 1) << " " << rot(2, 2) << " " << pos[2] << " "
                    << "0.0 0.0 0.0 1.0\n";
               }
-              // Close stream
+*/              // Close stream
               of.close();
             }
 
@@ -142,3 +142,4 @@ namespace gpd {
 int main(int argc, char *argv[]) {
   return gpd::apps::detect_grasps::DoMain(argc, argv);
 }
+
