@@ -1,3 +1,20 @@
+# Generate Grasp Annotation Files with docker-compose
+
+Put the object model files as .ply in the objects folder. 
+To start, run
+``` 
+docker-compose up
+```
+This will start the run_gpd.py script in a docker container. By default, it will try to create a maximum of 15 annotations for every object in the objects folder and save them in a corresponding txt file in the grasps folder. 
+In the txt file, each line represents an grasp candidate. The first value is the score assigned by gpd, the following values are the 4x4 transformation matrix.
+
+If you don't want to use the default values, you can change the docker-compose.yml and add the desired values as parsing arguments.
+For example, instead of creating 15 grasps for every object, you can create 20 grasps for a single object by doing the following change:
+``` yaml
+# command: bash -c "python3 /home/gpd/run_gpd.py"
+command: bash -c "python3 /home/gpd/run_gpd.py 20 textured_simple.ply"
+```
+original readme:
 # Grasp Pose Detection (GPD)
 
 * [Author's website](http://www.ccs.neu.edu/home/atp/)
